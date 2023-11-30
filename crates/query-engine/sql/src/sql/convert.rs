@@ -280,7 +280,9 @@ impl Expression {
                 if function.is_infix {
                     sql.append_syntax("(");
                     args[0].to_sql(sql);
+                    sql.append_syntax(" ");
                     function.to_sql(sql);
+                    sql.append_syntax(" ");
                     args[1].to_sql(sql);
                     sql.append_syntax(")");
                 } else {
