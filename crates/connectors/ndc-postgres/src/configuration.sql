@@ -228,6 +228,11 @@ WITH
         )
   ),
 
+  -- Comparison procedures are any entries in 'pg_proc' that happen to be
+  -- binary functions that return booleans. We also require, for the sake of
+  -- simplicity, that these functions be non-variadic (i.e. no default values).
+  -- Within this CTE, we attempt to generate a table of comparison procedures
+  -- to match the shape of the 'comparison_operators'.
   comparison_procedures AS
   (
     WITH
@@ -368,6 +373,10 @@ WITH
   -- procedure. On CockroachDB, however, they are independent.
   comparison_operators AS
   (
+    -- Here, we reunite our binary infix procedures and our binary prefix
+    -- procedures under the umbrella of 'comparison_operators'. We do this
+    -- here so that we can generate all the various type coercion permutations
+    -- for both in 'comparison_operators_cast_extended'.
     WITH infixes AS
       ( SELECT
           op.oprname AS operator_name,
@@ -880,7 +889,7 @@ FROM
           op.operator_name,
           op.argument1_type,
           op.argument2_type,
-          op.is_infix
+          op.is_infix -- always 't'
         FROM
           comparison_operators_cast_extended
           AS op
@@ -899,7 +908,7 @@ FROM
           operator_name,
           argument1_type,
           argument2_type,
-          is_infix
+          is_infix -- always 'f'
         FROM
           comparison_operators_cast_extended
         WHERE

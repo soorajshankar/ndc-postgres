@@ -194,7 +194,7 @@ mod tests {
 
     fn expr_eq(left: Expression, right: Expression) -> Expression {
         Expression::FunctionCall {
-            function: equals(),
+            function: function_equals(),
             args: vec![left, right],
         }
     }

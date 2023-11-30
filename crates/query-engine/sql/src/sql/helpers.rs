@@ -357,10 +357,10 @@ pub fn select_rows_as_json(
     table_alias: TableAlias,
 ) -> Select {
     let expression = Expression::FunctionCall {
-        function: coalesce(),
+        function: function_coalesce(),
         args: vec![
             Expression::FunctionCall {
-                function: json_agg(),
+                function: function_json_agg(),
                 args: vec![Expression::RowToJson(TableReference::AliasedTable(
                     table_alias.clone(),
                 ))],
@@ -393,7 +393,7 @@ pub fn select_row_as_json_with_default(
     table_alias: TableAlias,
 ) -> Select {
     let expression = Expression::FunctionCall {
-        function: coalesce(),
+        function: function_coalesce(),
         args: vec![
             Expression::RowToJson(TableReference::AliasedTable(table_alias.clone())),
             Expression::Value(Value::EmptyJsonArray),
@@ -456,10 +456,10 @@ pub fn from_variables(
 /// Wrap an expression in `coalesce(json_agg(<expr>), '[]')`.
 fn wrap_in_json_agg(expression: Expression) -> Expression {
     Expression::FunctionCall {
-        function: coalesce(),
+        function: function_coalesce(),
         args: vec![
             Expression::FunctionCall {
-                function: json_agg(),
+                function: function_json_agg(),
                 args: vec![expression],
             },
             Expression::Value(Value::EmptyJsonArray),

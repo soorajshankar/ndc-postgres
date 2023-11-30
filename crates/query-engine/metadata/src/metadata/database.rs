@@ -26,6 +26,9 @@ pub struct ComparisonOperator {
     pub is_infix: bool,
 }
 
+/// This is quite unfortunate: https://github.com/serde-rs/serde/issues/368
+/// TL;DR: we can't set default literals for serde, so if we want 'is_infix' to
+/// default to 'true', we have to set its default as a function that returns 'true'.
 fn default_true() -> bool {
     true
 }

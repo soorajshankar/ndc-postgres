@@ -280,9 +280,7 @@ impl Expression {
                 if function.is_infix {
                     sql.append_syntax("(");
                     args[0].to_sql(sql);
-                    sql.append_syntax(" ");
                     function.to_sql(sql);
-                    sql.append_syntax(" ");
                     args[1].to_sql(sql);
                     sql.append_syntax(")");
                 } else {
@@ -355,7 +353,13 @@ impl BinaryArrayOperator {
 
 impl Function {
     pub fn to_sql(&self, sql: &mut SQL) {
-        sql.append_syntax(&self.function_name)
+        if self.is_infix {
+            sql.append_syntax(" ");
+        }
+        sql.append_syntax(&self.function_name);
+        if self.is_infix {
+            sql.append_syntax(" ");
+        }
     }
 }
 

@@ -73,7 +73,8 @@ pub fn translate_expression(
             let left_typ = get_comparison_target_type(env, root_and_current_tables, column)?;
             let (left, left_joins) =
                 translate_comparison_target(env, state, root_and_current_tables, column)?;
-            let (op, argument_type) = operators::translate_comparison(env, &left_typ, operator)?;
+            let (op, argument_type) =
+                operators::translate_comparison_operator(env, &left_typ, operator)?;
             let (right, right_joins) = translate_comparison_value(
                 env,
                 state,

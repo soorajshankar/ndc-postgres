@@ -220,28 +220,32 @@ pub struct Function {
     pub is_infix: bool,
 }
 
-pub fn coalesce() -> Function {
+/// The Postgres 'coalesce' function for convenience.
+pub fn function_coalesce() -> Function {
     Function {
         function_name: "coalesce".to_string(),
         is_infix: false,
     }
 }
 
-pub fn count() -> Function {
+/// The Postgres 'COUNT' aggregate for convenience.
+pub fn function_count() -> Function {
     Function {
         function_name: "COUNT".to_string(),
         is_infix: false,
     }
 }
 
-pub fn equals() -> Function {
+/// The Postgres equality operator for convenience.
+pub fn function_equals() -> Function {
     Function {
         function_name: "=".to_string(),
         is_infix: true,
     }
 }
 
-pub fn json_agg() -> Function {
+/// The Postgres 'json_agg' operator for convenience.
+pub fn function_json_agg() -> Function {
     Function {
         function_name: "json_agg".to_string(),
         is_infix: false,

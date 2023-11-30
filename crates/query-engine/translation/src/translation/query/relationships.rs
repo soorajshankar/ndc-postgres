@@ -164,7 +164,7 @@ pub fn translate_column_mapping(
             let source_column_info = table_info.lookup_column(source_col)?;
             let target_column_info = target_collection_info.lookup_column(target_col)?;
             Ok(sql::ast::Expression::FunctionCall {
-                function: sql::ast::equals(),
+                function: sql::ast::function_equals(),
                 args: vec![
                     sql::ast::Expression::ColumnReference(sql::ast::ColumnReference::TableColumn {
                         table: current_table.reference.clone(),

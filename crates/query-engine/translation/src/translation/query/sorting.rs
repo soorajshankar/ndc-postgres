@@ -643,7 +643,7 @@ fn translate_targets(
                                 direction: element.direction,
                                 alias: column_alias.clone(),
                                 expression: sql::ast::Expression::Value(sql::ast::Value::Int8(1)),
-                                aggregate: Some(sql::ast::count()),
+                                aggregate: Some(sql::ast::function_count()),
                             })
                         }
                         Aggregate::SingleColumnAggregate { column, function } => {
