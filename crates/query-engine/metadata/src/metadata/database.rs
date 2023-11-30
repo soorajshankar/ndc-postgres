@@ -21,6 +21,7 @@ pub struct ComparisonOperators(pub BTreeMap<ScalarType, BTreeMap<String, Compari
 pub struct ComparisonOperator {
     pub operator_name: String,
     pub argument_type: ScalarType,
+    pub is_infix: bool,
 }
 
 /// Mapping from a "table" name to its information.

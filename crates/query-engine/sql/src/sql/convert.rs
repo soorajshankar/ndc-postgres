@@ -247,17 +247,6 @@ impl Expression {
                 sql.append_syntax("NOT ");
                 expr.to_sql(sql);
             }
-            Expression::BinaryOperation {
-                left,
-                operator,
-                right,
-            } => {
-                sql.append_syntax("(");
-                left.to_sql(sql);
-                operator.to_sql(sql);
-                right.to_sql(sql);
-                sql.append_syntax(")");
-            }
             Expression::BinaryArrayOperation {
                 left,
                 operator,
@@ -288,15 +277,23 @@ impl Expression {
                 sql.append_syntax(")");
             }
             Expression::FunctionCall { function, args } => {
-                function.to_sql(sql);
-                sql.append_syntax("(");
-                for (index, arg) in args.iter().enumerate() {
-                    arg.to_sql(sql);
-                    if index < (args.len() - 1) {
-                        sql.append_syntax(", ")
+                if function.is_infix {
+                    sql.append_syntax("(");
+                    args[0].to_sql(sql);
+                    function.to_sql(sql);
+                    args[1].to_sql(sql);
+                    sql.append_syntax(")");
+                } else {
+                    function.to_sql(sql);
+                    sql.append_syntax("(");
+                    for (index, arg) in args.iter().enumerate() {
+                        arg.to_sql(sql);
+                        if index < (args.len() - 1) {
+                            sql.append_syntax(", ")
+                        }
                     }
+                    sql.append_syntax(")");
                 }
-                sql.append_syntax(")");
             }
             Expression::Exists { select } => {
                 sql.append_syntax("EXISTS ");
@@ -346,14 +343,6 @@ impl UnaryOperator {
     }
 }
 
-impl BinaryOperator {
-    pub fn to_sql(&self, sql: &mut SQL) {
-        sql.append_syntax(" ");
-        sql.append_syntax(self.0.as_str());
-        sql.append_syntax(" ");
-    }
-}
-
 impl BinaryArrayOperator {
     pub fn to_sql(&self, sql: &mut SQL) {
         match self {
@@ -364,11 +353,7 @@ impl BinaryArrayOperator {
 
 impl Function {
     pub fn to_sql(&self, sql: &mut SQL) {
-        match self {
-            Function::Coalesce => sql.append_syntax("coalesce"),
-            Function::JsonAgg => sql.append_syntax("json_agg"),
-            Function::Unknown(name) => sql.append_syntax(name),
-        }
+        sql.append_syntax(&self.function_name)
     }
 }
 

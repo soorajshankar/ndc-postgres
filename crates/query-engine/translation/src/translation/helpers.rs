@@ -132,7 +132,7 @@ impl<'a> Env<'a> {
     }
 
     /// Looks up the binary comparison operator's PostgreSQL name and arguments' type in the metadata.
-    pub fn lookup_comparison_operator(
+    pub fn lookup_comparison(
         &self,
         scalar_type: &metadata::ScalarType,
         name: &String,

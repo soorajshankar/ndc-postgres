@@ -164,12 +164,6 @@ pub enum Expression {
     },
     /// NOT clause
     Not(Box<Expression>),
-    /// A binary operation on two scalar expression
-    BinaryOperation {
-        left: Box<Expression>,
-        operator: BinaryOperator,
-        right: Box<Expression>,
-    },
     /// A binary operation on a scalar expression and an array of scalar expressions
     BinaryArrayOperation {
         left: Box<Expression>,
@@ -213,10 +207,6 @@ pub enum UnaryOperator {
     IsNull,
 }
 
-/// Represents the name of a binary operator.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct BinaryOperator(pub String);
-
 /// A binary operator when the rhs is an array
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum BinaryArrayOperator {
@@ -225,10 +215,37 @@ pub enum BinaryArrayOperator {
 
 /// A scalar function
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub enum Function {
-    Coalesce,
-    JsonAgg,
-    Unknown(String),
+pub struct Function {
+    pub function_name: String,
+    pub is_infix: bool,
+}
+
+pub fn coalesce() -> Function {
+    Function {
+        function_name: "coalesce".to_string(),
+        is_infix: false,
+    }
+}
+
+pub fn count() -> Function {
+    Function {
+        function_name: "COUNT".to_string(),
+        is_infix: false,
+    }
+}
+
+pub fn equals() -> Function {
+    Function {
+        function_name: "=".to_string(),
+        is_infix: true,
+    }
+}
+
+pub fn json_agg() -> Function {
+    Function {
+        function_name: "json_agg".to_string(),
+        is_infix: false,
+    }
 }
 
 /// COUNT clause
